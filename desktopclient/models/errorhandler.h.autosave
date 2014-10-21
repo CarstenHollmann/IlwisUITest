@@ -1,0 +1,32 @@
+#ifndef ERRORHANDLER_H
+#define ERRORHANDLER_H
+
+#include "juliantime.h"
+
+#include <QObject>
+
+class ErrorModel : public QObject {
+    Q_OBJECT
+    
+public:
+    QString time() const;
+    QString type() const;
+    QString message() const;
+
+private:
+    Ilwis::Time _time;
+};
+
+class ErrorHandler : public QObject
+{
+    Q_OBJECT
+public:
+    explicit ErrorHandler(QObject *parent = 0);
+
+signals:
+
+public slots:
+
+};
+
+#endif // ERRORHANDLER_H

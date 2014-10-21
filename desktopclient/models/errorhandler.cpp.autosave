@@ -1,0 +1,11 @@
+#include "kernel.h"
+#include "errorhandler.h"
+
+using namespace Ilwis;
+
+ErrorHandler::ErrorHandler(QObject *parent) :
+    QObject(parent)
+{
+}
+
+
