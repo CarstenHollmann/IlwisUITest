@@ -53,6 +53,7 @@ int main(int argc, char *argv[])
 
 
         MasterCatalogModel mastercatalogmodel(ctx);
+
         ApplicationFormExpressionParser formbuilder;
         UserMessageHandler messageHandler;
         OperationCatalogModel operations;
