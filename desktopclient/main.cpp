@@ -7,6 +7,7 @@
 #include "kernel.h"
 #include "errorobject.h"
 #include "resource.h"
+#include "ilwistype.h"
 #include "catalog.h"
 #include "mastercatalog.h"
 #include "catalogview.h"
@@ -18,8 +19,11 @@
 #include "models/usermessagehandler.h"
 #include "applicationformexpressionparser.h"
 #include "models/tranquilizerhandler.h"
+#include "models/visualizationmanager.h"
+#include "models/objectvisualizationmodel.h"
+#include "models/ilwisobjectmodel.h"
 
-#define TEST_WORKINGDIR "file:///h:/projects/Ilwis4/testdata"
+#define TEST_WORKINGDIR QString("file:///d:/projects/ilwis/Ilwis4/testdata")
 
 using namespace Ilwis;
 //using namespace Desktopclient;
@@ -43,17 +47,32 @@ int main(int argc, char *argv[])
         qmlRegisterType<MessageModel>("MessageModel",1,0,"MessageModel");
         qmlRegisterType<TranquilizerHandler>("TranquilizerHandler",1,0, "TranquilizerHandler");
         qmlRegisterType<TranquilizerModel>("TranquilizerModel",1,0, "TranquilizerModel");
+        qmlRegisterType<VisualizationManager>("VisualizationManager",1,0,"VisualizationManager");
+        qmlRegisterType<ObjectVisualizationModel>("ObjectVisualizationModel",1,0,"ObjectVisualizationModel");
+        qmlRegisterType<IlwisObjectModel>("IlwisObjectModel",1,0,"IlwisObjectModel");
+
 
         MasterCatalogModel mastercatalogmodel(ctx);
         ApplicationFormExpressionParser formbuilder;
         UserMessageHandler messageHandler;
         OperationCatalogModel operations;
         TranquilizerHandler tranquilizers;
+        VisualizationManager visualizationManager;
+
+        //test
+        //visualizationManager.addPropertyEditor(itRASTER, "dummy","file:///h:/temp/test.qml");
+        //visualizationManager.addVisualizationModel(0,0, new ObjectVisualizationModel(Resource(TEST_WORKINGDIR + "GCL_INT__12.mpr", itRASTER)));
+       //visualizationManager.addVisualizationModel(0,1, new ObjectVisualizationModel(Resource(TEST_WORKINGDIR + "woredas.shp", itFEATURE)));
+        //visualizationManager.addVisualizationModel(0,2, new ObjectVisualizationModel(Resource(TEST_WORKINGDIR + "average_monthly_temperature_june_7.mpr", itRASTER)));
+
+
         ctx->setContextProperty("mastercatalog", &mastercatalogmodel);
         ctx->setContextProperty("formbuilder", &formbuilder);
         ctx->setContextProperty("messagehandler", &messageHandler);
         ctx->setContextProperty("tranquilizerHandler", &tranquilizers);
         ctx->setContextProperty("operations", &operations);
+        ctx->setContextProperty("visualizationmanager", &visualizationManager);
+
 
         mastercatalogmodel.connect(&operations, &OperationCatalogModel::updateCatalog,&mastercatalogmodel, &MasterCatalogModel::updateCatalog );
         messageHandler.connect(kernel()->issues().data(), &IssueLogger::updateIssues,&messageHandler, &UserMessageHandler::addMessage );

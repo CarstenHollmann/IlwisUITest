@@ -50,7 +50,10 @@ SOURCES += desktopclient/main.cpp \
     desktopclient/models/operationmodel.cpp \
     desktopclient/applicationformexpressionparser.cpp \
     desktopclient/models/usermessagehandler.cpp \
-    desktopclient/models/tranquilizerhandler.cpp
+    desktopclient/models/tranquilizerhandler.cpp \
+    desktopclient/models/objectvisualizationmodel.cpp \
+    desktopclient/models/visualizationmanager.cpp \
+    desktopclient/models/ilwisobjectmodel.cpp
 
 LIBS += -L$$PWD/../libraries/$$PLATFORM$$CONF/ -lilwiscore
 LIBS += -L$$PWD/../libraries/$$PLATFORM$$CONF/ -llibgeos
@@ -80,7 +83,10 @@ OTHER_FILES += \
     desktopclient/qml/DesktopClient.qml \
     desktopclient/qml/views/DummyList.qml \
     desktopclient/qml/panel/FolderSource.qml \
-    desktopclient/qml/panel/CatalogList.qml
+    desktopclient/qml/panel/Visualize.qml \
+    desktopclient/qml/Visualization.qml \
+    desktopclient/qml/panel/CatalogTable.qml \
+    desktopclient/qml/panel/CatalogThumbGrid.qml
 
 HEADERS += \
     desktopclient/ilwistype.h \
@@ -91,7 +97,10 @@ HEADERS += \
     desktopclient/models/operationmodel.h \
     desktopclient/applicationformexpressionparser.h \
     desktopclient/models/usermessagehandler.h \
-    desktopclient/models/tranquilizerhandler.h
+    desktopclient/models/tranquilizerhandler.h \
+    desktopclient/models/objectvisualizationmodel.h \
+    desktopclient/models/visualizationmanager.h \
+    desktopclient/models/ilwisobjectmodel.h
 
 # Installation path
 

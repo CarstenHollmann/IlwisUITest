@@ -45,7 +45,7 @@ MasterCatalogModel::MasterCatalogModel(QQmlContext *qmlcontext) :  _qmlcontext(q
         res.addProperty("filter","");
         res.setDescription(descr);
         CatalogView cview(res);
-        _activeCatalogs[res.url().toString()] = new CatalogModel(cview,0);
+        _activeCatalogs[res.url().toString()] = new CatalogModel(cview,0,this);
         _bookmarkedList.push_back(res.url().toString());
     }
 
@@ -214,8 +214,61 @@ void MasterCatalogModel::setObjectFilterCurrentCatalog(const QString &objecttype
     }
 }
 
+ResourceModel* MasterCatalogModel::id2Resource(const QString &objectid)
+{
+    bool ok;
+    Resource resource = mastercatalog()->id2Resource(objectid.toULongLong(&ok));
+    if (ok && resource.isValid()){
+        ResourceModel *model = new ResourceModel(resource,this);
+        return model;
+    }
+    qDebug() << " wrong id used";
+    return 0;
+}
+
+QStringList MasterCatalogModel::knownCatalogs(bool fileonly)
+{
+    QStringList folders;
+    std::vector<Resource> catalogs = mastercatalog()->select("type=" + QString::number(itCATALOG));
+    for(const auto& resource : catalogs){
+        if ( resource.url().scheme() != "file" && fileonly == false)
+            folders.append(resource.url().toString());
+        else if ( fileonly && resource.url().scheme() == "file"){
+            folders.append(resource.url().toLocalFile());
+        }
+    }
+    return folders;
+}
+
+void MasterCatalogModel::setWorkingCatalog(const QString &path)
+{
+    if ( path != "")
+        context()->setWorkingCatalog(ICatalog(path));
+}
+
+void MasterCatalogModel::refreshWorkingCatalog()
+{
+    CatalogModel *catalogModel = selectedCatalog();
+    if ( catalogModel) {
+        auto items = context()->workingCatalog()->items();
+        mastercatalog()->removeItems(items);
+        context()->workingCatalog()->scan();
+        catalogModel->refresh(true);
+    }
+
+    emit resourcesChanged();
+}
+
 void MasterCatalogModel::setIndex(const QModelIndex &index, const QVariant &value, int role)
 {
     
+}
+
+QQmlListProperty<IlwisObjectModel> MasterCatalogModel::selectedData()
+{
+     CatalogModel *catalogModel = selectedCatalog();
+     if ( catalogModel)
+         return catalogModel->selectedData();
+     return QQmlListProperty<IlwisObjectModel>();
 }
 

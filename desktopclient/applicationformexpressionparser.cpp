@@ -144,6 +144,34 @@ QString ApplicationFormExpressionParser::iconName(IlwisTypes dataType) const{
     return sUNDEF;
 }
 
+QString ApplicationFormExpressionParser::keys(IlwisTypes type) const{
+    QString keypart;
+    if ( hasType(type, itRASTER)){
+        keypart += "\""+ iconName(itRASTER) + "\"";
+    }
+    if ( hasType(type, itTABLE)){
+        if ( keypart != "") keypart += ",";
+        keypart += "\""+ iconName(itTABLE) + "\"";
+    }
+    if ( hasType(type, itFEATURE)){
+        if ( keypart != "") keypart += ",";
+        keypart += "\""+ iconName(itFEATURE) + "\",\"line20.png\",\"point20.png\",\"polygon20.png\"";
+    }
+    if ( hasType(type, itDOMAIN)){
+        if ( keypart != "") keypart += ",";
+        keypart += "\""+ iconName(itDOMAIN) + "\"";
+    }
+    if ( hasType(type, itNUMBER)){
+        if ( keypart != "") keypart += ",";
+        keypart += "\""+ iconName(itNUMBER) + "\"";
+    }
+    if ( hasType(type, itSTRING)){
+        if ( keypart != "") keypart += ",";
+        keypart += "\""+ iconName(itSTRING) + "\"";
+    }
+    return keypart;
+}
+
 QString ApplicationFormExpressionParser::setInputIcons(const QString& iconField1, const QString& iconField2,const std::vector<FormParameter>& parameters, int i, int& imagewidth) const
 {
     const int iconsize = 20;
@@ -181,10 +209,10 @@ QString ApplicationFormExpressionParser::setInputIcons(const QString& iconField1
 
 QString ApplicationFormExpressionParser::makeFormPart(int width, const std::vector<FormParameter>& parameters, bool input, QString& results) const{
     QString rowBodyText = "Rectangle{height : 20;width : parent.width;color : background1;%1Text { x:%5 + %6;text: qsTr(\"%2\"); id:label_pin_%4; width : %3 - %5 - %6;wrapMode:Text.Wrap }";
-    QString textField = "DropArea{ x : %2; height : 20; width : parent.width - label_pin_%1.width - 5 - %3 - %4 - %5; keys: [\"%6\"];\
+    QString textField = "DropArea{ x : %2; height : 20; width : parent.width - label_pin_%1.width - 5 - %3 - %4 - %5; keys: [%6];\
                onDropped : { pin_%1.text = drag.source.message }\
             TextField{ id : pin_%1; anchors.fill : parent optionalOutputMarker}}";
-    QString textArea = "DropArea{ x : %2; height : 55; width : parent.width - label_pin_%1.width - 5 - %3 - %4 - %5; keys: [\"%6\"];\
+    QString textArea = "DropArea{ x : %2; height : 55; width : parent.width - label_pin_%1.width - 5 - %3 - %4 - %5; keys: [%6];\
            onDropped : { pin_%1.text = drag.source.message }\
         TextArea{ id : pin_%1; anchors.fill : parent optionalOutputMarker}}";
 
@@ -219,8 +247,7 @@ QString ApplicationFormExpressionParser::makeFormPart(int width, const std::vect
                     arg(checkWidth).
                     arg(imagewidth).
                     arg(xshift).
-                    arg(input ? iconName(parameters[i]._dataType) : "?");
-
+                    arg(input ? keys(parameters[i]._dataType) : "\"?\"");
             QString parameterRow = QString(rowBodyText + textFieldPart + imagePart + "}").arg(check).arg(parameters[i]._label).arg(width).arg(i).arg(checkWidth).arg(xshift);
             formRows += parameterRow;
             if ( results != "")

@@ -68,6 +68,11 @@ QQmlListProperty<ResourceModel> CatalogModel::resources() {
     return  QQmlListProperty<ResourceModel>();
 }
 
+QQmlListProperty<IlwisObjectModel> CatalogModel::selectedData()
+{
+     return  QQmlListProperty<IlwisObjectModel>(this, _selectedObjects);
+}
+
 void CatalogModel::filterChanged(const QString& objectType, bool state){
     _filterState[objectType] = state;
     QString filterString;
@@ -75,11 +80,31 @@ void CatalogModel::filterChanged(const QString& objectType, bool state){
         if ( !iter.second){
             if ( filterString != "")
                 filterString += " and ";
-            filterString += QString("type") + "<>'" + objectType + "'";
+            filterString += QString("type") + "& '" + iter.first + "' =0";
         }
     }
     _refresh = true;
     _view.filter(filterString);
+}
+
+void CatalogModel::refresh(bool yesno)
+{
+    _refresh = yesno;
+}
+
+void CatalogModel::setSelectedObjects(const QString &objects)
+{
+    QStringList parts = objects.split("|");
+    _selectedObjects.clear();
+    for(auto objectid : parts){
+        Resource resource = mastercatalog()->id2Resource(objectid.toULongLong());
+        IlwisObjectModel *ioModel = new IlwisObjectModel(resource, this);
+        if ( ioModel->isValid()){
+            _selectedObjects.append(ioModel);
+            emit selectionChanged();
+        }else
+            delete ioModel;
+    }
 }
 
 void CatalogModel::gatherItems() {

@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QFileInfo>
 #include <QQmlListProperty>
+#include "ilwisobjectmodel.h"
 #include "resourcemodel.h"
 #include "catalogview.h"
 
@@ -18,6 +19,7 @@ class CatalogModel : public ResourceModel
     Q_OBJECT
 public:
     Q_PROPERTY(QQmlListProperty<ResourceModel> resources READ resources CONSTANT)
+    Q_PROPERTY(QQmlListProperty<IlwisObjectModel> selectedData READ selectedData NOTIFY selectionChanged)
     Q_PROPERTY(bool initNode READ initNode CONSTANT)
     Q_PROPERTY(int level READ level CONSTANT)
     Q_PROPERTY(int isScanned READ isScanned CONSTANT)
@@ -28,12 +30,16 @@ public:
     bool initNode() const;
     int level() const;
     QQmlListProperty<ResourceModel> resources();
+    QQmlListProperty<IlwisObjectModel> selectedData();
     void filterChanged(const QString &objectType, bool state);
+    void refresh(bool yesno);
+    Q_INVOKABLE void setSelectedObjects(const QString& objects);
 protected:
     Ilwis::CatalogView _view;
     void newview(const Ilwis::CatalogView &view);
     void gatherItems();
    QList<ResourceModel *> _currentItems;
+   QList<IlwisObjectModel *> _selectedObjects;
 
 private:
     //bool _hasChilderen;
@@ -41,7 +47,11 @@ private:
     bool _initNode;
     int _level;
     std::map<QString, bool> _filterState;
+
     bool _refresh = false;
+
+signals:
+    void selectionChanged();
 
 
 };

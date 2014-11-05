@@ -37,6 +37,7 @@ private:
     std::vector<ApplicationFormExpressionParser::FormParameter> getOutputParameters(quint64 metaid) const;
     QString makeFormPart(int width, const std::vector<FormParameter> &parameters, bool input, QString &results) const;
     QString iconName(IlwisTypes dataType) const;
+    QString keys(IlwisTypes type) const;
 };
 
 #endif // APPLICATIONFORMEXPRESSIONPARSER_H

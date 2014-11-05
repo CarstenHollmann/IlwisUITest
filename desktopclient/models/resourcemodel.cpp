@@ -4,6 +4,12 @@
 #include "kernel.h"
 #include "connectorinterface.h"
 #include "resource.h"
+#include "ilwisdata.h"
+#include "angle.h"
+#include "geometries.h"
+#include "ellipsoid.h"
+#include "projection.h"
+#include "proj4parameters.h"
 #include "ilwisobject.h"
 #include "mastercatalog.h"
 #include "resourcemodel.h"
@@ -32,6 +38,28 @@ ResourceModel::ResourceModel(const Ilwis::Resource& source, QObject *parent) :
     resource(source);
 }
 
+ResourceModel::ResourceModel(const ResourceModel &model) : QObject(model.parent())
+{
+    _displayName = model._displayName;
+
+    _item = model._item;
+    _imagePath = model._imagePath;
+    _type = model._type;
+    _isRoot = model._isRoot;
+}
+
+ResourceModel &ResourceModel::operator=(const ResourceModel &model)
+{
+    _displayName = model._displayName;
+
+    _item = model._item;
+    _imagePath = model._imagePath;
+    _type = model._type;
+    _isRoot = model._isRoot;
+
+    return *this;
+}
+
 ResourceModel::~ResourceModel()
 {
 
@@ -47,9 +75,14 @@ quint64 ResourceModel::type() const
     return _type;
 }
 
+QString ResourceModel::typeName() const
+{
+    return TypeHelper::type2name(_type);
+}
+
 QString ResourceModel::name() const
 {
-    if ( !_item.isValid()) {
+    if ( _item.isValid()) {
         return _item.name();
     }
     return "";
@@ -57,8 +90,11 @@ QString ResourceModel::name() const
 
 QString ResourceModel::size() const
 {
-    if ( _item.isValid() && _item.ilwisType() != itCATALOG)
-        return  QString::number(_item.size());
+    if ( _item.isValid() && _item.ilwisType() != itCATALOG){
+        quint64 sz = _item.size();
+        if ( sz != 0)
+            return  QString::number(sz);
+    }
     return "";
 }
 
@@ -149,7 +185,7 @@ Resource ResourceModel::item() const
 
 QString ResourceModel::domainName() const {
     QString nme =  propertyName("domain");
-    if ( nme != displayName())
+    if ( nme != displayName() && nme != "")
         return nme;
     quint64 tp = _item.ilwisType();
     if ( hasType(tp, itCOVERAGE))
@@ -158,14 +194,46 @@ QString ResourceModel::domainName() const {
 }
 
 QString ResourceModel::domainType() const {
-    return propertyTypeName(itDOMAIN, "domain");
+    QString nme = propertyTypeName(itDOMAIN, "domain");
+    if ( nme != "")
+        return nme;
+    quint64 tp = _item.ilwisType();
+    if ( hasType(tp, itCOVERAGE))
+        return "Identifier";
+    return "";
+}
+
+QString ResourceModel::proj42DisplayName(const QString& proj4Def) const{
+    Proj4Parameters parms(proj4Def);
+    QString projName = Projection::projectionCode2Name(parms["proj"]);
+    QString ellipse = Ellipsoid::ellipsoidCode2Name(parms["proj"]);
+    if ( ellipse == sUNDEF)
+        return sUNDEF;
+    return projName + "/" + ellipse;
 }
 
 QString ResourceModel::coordinateSystemName() const {
     QString nme =  propertyName("coordinatesystem");
-    if ( nme != displayName())
+    if ( nme != displayName() && nme != "")
         return nme;
-    return "";
+    if ( nme == ""){
+        nme = _item["coordinatesystem"].toString();
+        if ( nme != ""){
+            int index = nme.toLower().indexOf("code=");
+            if ( index == -1){
+                nme = _item.code();
+            }
+            if ((index = nme.toLower().indexOf("code=epsg")) != -1){
+                nme = nme.mid(5);
+            }
+            else if ( (index = nme.toLower().indexOf("code=proj4")) != -1){
+                nme = proj42DisplayName(nme.mid(5));
+            }else {
+                nme = Projection::projectionCode2Name(nme.mid(5));
+            }
+        }
+    }
+    return nme != sUNDEF ? nme : "";
 }
 
 QString ResourceModel::coordinateSystemType() const {
@@ -214,12 +282,22 @@ void ResourceModel::resource(const Ilwis::Resource& res)
             _imagePath =  "file:///" +  thumbPath.absoluteFilePath();
         } else {
             if ( item.ilwisType() == itCATALOG) {
-                _imagePath = "../images/catalog.png";
+                _imagePath = "catalog.png";
             }
-            else if ( inf.suffix() == "csy")
-                _imagePath = "../images/csy.png";
+            if ( hasType(item.ilwisType(), itRASTER))
+                 _imagePath = "remote.png";
+            else if ( hasType(item.ilwisType(), itFEATURE))
+                _imagePath = "polygon.png";
+            else if ( hasType(item.ilwisType(), itCOORDSYSTEM))
+                _imagePath = "csy.png";
+            else if ( hasType(item.ilwisType(), itGEOREF))
+                _imagePath = "grf.png";
+            else if ( hasType(item.ilwisType(), itTABLE))
+                _imagePath = "table.jpg";
+            else if ( hasType(item.ilwisType(), itDOMAIN))
+                _imagePath = "domainn.png";
             else
-                _imagePath = "images/remote.png";
+                _imagePath = "blank.png";
         }
     }else
        _displayName = item.name();

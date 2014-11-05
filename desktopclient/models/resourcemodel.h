@@ -27,16 +27,20 @@ class ResourceModel : public QObject
     Q_PROPERTY(bool  isRoot READ isRoot CONSTANT)
     Q_PROPERTY(QString  id READ id CONSTANT)
     Q_PROPERTY(quint64 type READ type CONSTANT)
+    Q_PROPERTY(QString typeName READ typeName CONSTANT)
     Q_PROPERTY(QString url READ url CONSTANT)
 
-    Q_INVOKABLE QString getProperty(const QString& propertyname);
+
 
 public:
     ResourceModel();
     explicit ResourceModel(const Ilwis::Resource &source, QObject *parent = 0);
+    ResourceModel(const ResourceModel& model);
+    ResourceModel& operator=(const ResourceModel& model);
     virtual ~ResourceModel();
     QString imagePath() const;
     quint64 type() const;
+    QString typeName() const;
     QString name() const;
     void resource(const Ilwis::Resource &res);
     Ilwis::Resource resource() const;
@@ -50,7 +54,7 @@ public:
     QString geoReferenceName() const;
     QString geoReferenceType() const ;
     QString size() const;
-    QString description() const;
+    virtual QString description() const;
     QString dimensions() const;
     QString displayName() const;
     void setDisplayName(const QString& name);
@@ -59,18 +63,25 @@ public:
     bool isRoot() const;
     QString id() const;
 
+
     Ilwis::Resource item() const;
+
+    Q_INVOKABLE QString virtual getProperty(const QString& propertyname);
+
     static QString iconPath(IlwisTypes tp) ;
 protected:
     QString _displayName;
 private:
     QString propertyTypeName(quint64 typ, const QString &propertyName) const;
     QString propertyName(const QString &property) const;
+    QString proj42DisplayName(const QString &proj4Def) const;
 
     Ilwis::Resource _item;
     QString _imagePath;
     quint64 _type;
     bool _isRoot;
+
+
 
 signals:
     void displayNameChanged();
