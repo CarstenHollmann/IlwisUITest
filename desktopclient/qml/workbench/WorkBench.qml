@@ -12,7 +12,7 @@ Rectangle {
     property int rightMargin : 18 // creates space for potential scrollbars
 
      function transitionInfoPane(newpagename) {
-        if ( newpagename !== lastPage) {
+          if ( newpagename !== lastPage) {
             if ( lastPage == "")
                 workbench.state = "visible"
             else if ( workbench.state == "invisible")
@@ -23,7 +23,7 @@ Rectangle {
 
             currentloader.item.state = "invisible"
 
-            newloader.source = "../" + newpagename
+            newloader.source = newpagename
             newloader.item.state = "visible"
             newloader.enabled = true
             lastPage = newpagename;
@@ -95,7 +95,7 @@ Rectangle {
         }
     ]
     Component.onCompleted: {
-        infoPContent1.source = "../Navigator.qml"
+        infoPContent1.source = "Navigator.qml"
     }
 
 
