@@ -25,7 +25,7 @@ Rectangle {
     }
     Image {
         anchors.fill: parent
-        source : "images/back2.png"
+        source : "../images/back2.png"
         opacity : 0.5
         smooth : true
     }
