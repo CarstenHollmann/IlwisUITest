@@ -12,6 +12,14 @@ Component {
 
 
         Item {
+            function iconsource(name) {
+                if ( name.indexOf("/") !== -1)
+                    return name
+
+                 var iconP = "../../images/" + name
+                 return iconP
+             }
+
             y : 4
             id : propertyForm
             height :255
@@ -35,7 +43,7 @@ Component {
                 }
                 Image {
                     id : typeico
-                    source : "images/" + iconPath
+                    source : iconsource(iconPath)
                     width : 20
                     height : 20
                     anchors.right: parent.right
