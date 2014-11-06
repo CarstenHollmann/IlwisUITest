@@ -75,7 +75,7 @@ Rectangle {
                 id : addContainer
                 width : 90
                 height : 45
-                Image { anchors.horizontalCenter: parent.horizontalCenter ;source: "images/catalogsources.png"; y : 5 ;width : 20; height : 20 }
+                Image { anchors.horizontalCenter: parent.horizontalCenter ;source: "../images/catalogsources.png"; y : 5 ;width : 20; height : 20 }
                 text :  "\nCatalog Sources"
                 action : createCatalog
 
@@ -84,7 +84,7 @@ Rectangle {
                 id : removeBookmark
                 width : 90
                 height : 45
-                Image { anchors.horizontalCenter: parent.horizontalCenter ;source: "images/deletebookmark20.png"; y : 5 ;width : 20; height : 20 }
+                Image { anchors.horizontalCenter: parent.horizontalCenter ;source: "../images/deletebookmark20.png"; y : 5 ;width : 20; height : 20 }
                 text :  "\nDelete Bookmark"
                 action : deleteBookmark
 
