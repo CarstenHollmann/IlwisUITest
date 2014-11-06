@@ -5,13 +5,26 @@ import QtQuick.Controls.Styles 1.0
 import MessageModel 1.0
 import ResourceModel 1.0
 import QtQuick 2.0
+import "catalog" as Catalog
+
 
 
 Rectangle {
+
     id: centerItem
     color: background4
     height : parent.height - 16
     width : bigthing.width - buttonB.width - infoP.width - 5
+
+    function iconSource(name) {
+        if ( name.indexOf("/") !== -1)
+            return name
+
+         var iconP = "../images/" + name
+         return iconP
+
+     }
+
     ToolBar{
         id : tabtools
         width : parent.width
@@ -25,7 +38,7 @@ Rectangle {
             anchors.rightMargin: 2
             Image {
                 anchors.fill: parent
-                source : "../images/plus.png"
+                source : iconSource("plus.png")
                 fillMode: Image.PreserveAspectFit
             }
         }
@@ -38,7 +51,7 @@ Rectangle {
             anchors.rightMargin: 4
             Image {
                 anchors.fill: parent
-                source : "../images/minus.png"
+                source : iconSource("minus.png")
                 fillMode: Image.PreserveAspectFit
             }
         }
@@ -52,7 +65,7 @@ Rectangle {
 
         id : tabs
             function showObject(objectid){
-                 var component = Qt.createComponent("Visualize.qml")
+                 var component = Qt.createComponent("visualization/Visualize.qml")
                 var resource = mastercatalog.id2Resource(objectid)
                 if ( resource !== null){
                     var name = resource.displayName
@@ -75,7 +88,7 @@ Rectangle {
            Tab {
             id : catalog_0
             title : "Catalog"
-            CatalogPanel{
+            Catalog.CatalogPanel{
             }
         }
     }
