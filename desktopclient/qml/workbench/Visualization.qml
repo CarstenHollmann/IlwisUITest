@@ -17,16 +17,24 @@ Rectangle {
     height : 500
     opacity : 1
 
+    function iconsource(name) {
+        if ( name.indexOf("/") !== -1)
+            return name
+
+         var iconP = "../images/" + name
+         return iconP
+     }
+
     FunctionBarHeader{
         id : functionBarHeader
-        headerImage: "../images/visualization40.png"
+        headerImage: iconsource("visualization40.png")
         headerText:"Visualization"
         z : 1
     }
 
     Image {
         anchors.fill: parent
-        source : "images/back2.png"
+        source : iconsource("back2.png")
         opacity : 0.5
         smooth : true
     }
@@ -38,17 +46,17 @@ Rectangle {
         id : dummyMaps
         ListElement {
             displayName : "GCL_INT__12.mpr"
-            imagePath: "images/raster20.png"
+            imagePath: "raster20.png"
             type : "rastercoverage"
         }
         ListElement {
             displayName : "woredas.shp"
-            imagePath: "images/feature20.png"
+            imagePath: "feature20.png"
             type : "featurecoverage"
         }
         ListElement {
             displayName : "average_monthly_temperature_june_7.mpr"
-            imagePath: "images/raster20.png"
+            imagePath: "raster20.png"
             type : "rastercoverage"
         }
 
@@ -58,27 +66,27 @@ Rectangle {
         id: globalPropertiesList
         ListElement {
             label : "3D"
-            icon: "images/threeD.ico"
+            icon: "threeD.ico"
             editor : "rastercoverage"
         }
         ListElement {
             label : "DistanceMeasurer"
-            icon: "images/measurer.ico"
+            icon: "measurer.ico"
             editor : "featurecoverage"
         }
         ListElement {
             label : "Geometry"
-            icon: "images/csy.ico"
+            icon: "csy.ico"
             editor : "featurecoverage"
         }
         ListElement {
             label : "Grid"
-            icon: "images/grid.ico"
+            icon: "grid.ico"
             editor : "featurecoverage"
         }
         ListElement {
             label : "Gratticule"
-            icon: "images/grat.ico"
+            icon: "grat.ico"
             editor : "featurecoverage"
         }
     }
@@ -87,17 +95,17 @@ Rectangle {
         id: representationList
         ListElement {
             label : "Single color"
-            icon: "images/singlecolor.ico"
+            icon: "singlecolor.ico"
             type : "rastercoverage"
         }
         ListElement {
             label : "Multiple colors"
-            icon: "images/multiplecolors.ico"
+            icon: "multiplecolors.ico"
             type : "featurecoverage"
         }
         ListElement {
             label : "Representation"
-            icon: "images/rpr.ico"
+            icon: "rpr.ico"
             type : "featurecoverage"
         }
     }
@@ -106,17 +114,17 @@ Rectangle {
         id: visibilityList
         ListElement {
             label : "Visibility"
-            icon: "images/mapview.bmp"
+            icon: "mapview.bmp"
             type : "rastercoverage"
         }
         ListElement {
             label : "Labels"
-            icon: "images/atx.ico"
+            icon: "atx.ico"
             type : "featurecoverage"
         }
         ListElement {
             label : "Selections"
-            icon: "images/select.ico"
+            icon: "select.ico"
             type : "featurecoverage"
         }
     }
@@ -166,7 +174,7 @@ Rectangle {
                                     height : parent.height
                                     spacing : 3
                                     Image {
-                                        source : imagePath
+                                        source : iconsource(imagePath)
                                         width : 13
                                         fillMode: Image.PreserveAspectFit
                                         anchors.verticalCenter: parent.verticalCenter

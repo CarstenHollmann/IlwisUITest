@@ -2,6 +2,14 @@ import QtQuick 2.0
 
 ListView{
 
+    function iconsource(name) {
+        if ( name.indexOf("/") !== -1)
+            return name
+
+         var iconP = "../images/" + name
+         return iconP
+     }
+
     property int headerHeight : 26
 
     id: propertiesList
@@ -34,7 +42,7 @@ ListView{
         }
         Image {
             height : 16; width :16
-            source : icon
+            source : iconsource(icon)
             anchors.right: parent.right
         }
 
