@@ -16,7 +16,7 @@ Rectangle {
     height : 500
     opacity : 1
 
-    Panel.FunctionBarHeader{
+    FunctionBarHeader{
         id : functionBar
         headerImage: "../images/message40.png"
         headerText:"Messages"
