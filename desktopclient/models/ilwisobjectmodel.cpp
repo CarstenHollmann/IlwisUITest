@@ -115,6 +115,31 @@ QString IlwisObjectModel::valuetype() const
     return typeName == sUNDEF ? "" : typeName;
 }
 
+QString IlwisObjectModel::rangeDefinition() {
+    IlwisTypes objectype = _ilwisobject->ilwisType();
+    IDomain dom;
+    if ( hasType( objectype, itCOVERAGE|itDOMAIN)){
+        if ( objectype == itRASTER){
+            IRasterCoverage raster = _ilwisobject.as<RasterCoverage>();
+            dom = raster->datadef().domain();
+        } else if ( hasType( objectype , itFEATURE)){
+            IFeatureCoverage features = _ilwisobject.as<FeatureCoverage>();
+            ColumnDefinition coldef = features->attributeDefinitions().columndefinition(COVERAGEKEYCOLUMN);
+            if ( coldef.isValid()){
+                dom = coldef.datadef().domain();
+            }
+
+        } else if ( hasType( objectype , itDOMAIN)){
+            dom = _ilwisobject.as<Domain>();
+        }
+        if ( dom.isValid()){
+            return dom->range()->toString();
+
+        }
+    }
+    return "";
+}
+
 QString IlwisObjectModel::getProperty(const QString &propertyname)
 {
     QString property = ResourceModel::getProperty(propertyname);

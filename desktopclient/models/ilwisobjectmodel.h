@@ -15,7 +15,7 @@ class IlwisObjectModel : public ResourceModel
     Q_PROPERTY(QString externalFormat READ externalFormat CONSTANT)
     Q_PROPERTY(bool externalReadOnly READ externalReadOnly CONSTANT)
     Q_PROPERTY(QString valuetype READ valuetype CONSTANT)
-
+    Q_PROPERTY(QString rangeDefinition READ rangeDefinition CONSTANT)
 
 
 public:
@@ -31,6 +31,7 @@ public:
     bool externalReadOnly() const;
     void description(const QString& desc) const;
     QString valuetype() const;
+    QString rangeDefinition();
 
     Q_INVOKABLE QString virtual getProperty(const QString& propertyname);
 
