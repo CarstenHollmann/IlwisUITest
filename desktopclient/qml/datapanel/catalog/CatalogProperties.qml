@@ -45,7 +45,7 @@ Rectangle {
         id : title
         width : parent.width
         height : 24
-        source : "../images/headerblue.png"
+        source : "../../images/headerblue.png"
     Text {
         text : "Properties"
         font.bold : true
@@ -63,7 +63,7 @@ Rectangle {
             height : 20
             width :20
             action : saveProperties
-            Image { anchors.centerIn : parent; width : 16; height : 16; source: "../images/minisave.png"; smooth : true}
+            Image { anchors.centerIn : parent; width : 16; height : 16; source: "../../images/minisave.png"; smooth : true}
 
         }
         Button{
@@ -71,14 +71,14 @@ Rectangle {
             height : 20
             width :20
             action : maxButtons
-            Image { anchors.centerIn : parent; source: "../images/max1.png" }
+            Image { anchors.centerIn : parent; source: "../../images/max1.png" }
         }
         Button{
             id : close
             height : 20
             width :20
             action : minButtons
-            Image { anchors.centerIn : parent; source: "../images/min1.png" }
+            Image { anchors.centerIn : parent; source: "../../images/min1.png" }
         }
     }
 

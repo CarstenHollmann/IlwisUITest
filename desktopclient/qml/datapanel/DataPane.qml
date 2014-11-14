@@ -6,6 +6,8 @@ import MessageModel 1.0
 import ResourceModel 1.0
 import QtQuick 2.0
 import "catalog" as Catalog
+import "modeller" as Modeller
+import "../workbench" as Workbench
 
 
 
@@ -16,6 +18,8 @@ Rectangle {
     height : parent.height - 16
     width : bigthing.width - buttonB.width - infoP.width - 5
 
+    property string prefix: "Modeller for "
+
     function iconSource(name) {
         if ( name.indexOf("/") !== -1)
             return name
@@ -24,6 +28,59 @@ Rectangle {
          return iconP
 
      }
+
+    function addNewTab(name) {
+        if (!modellerPaneExists(name)) {
+            tabs.addTab(modellerTitle(name),Qt.createComponent("modeller/ModellerPanel.qml"))
+            tabs.currentIndex++
+        }
+    }
+
+    function showModellerPane(name) {
+        if (modellerPaneExists(name)) {
+            for (var i = 0; i < tabs.count; i++) {
+                if (tabs.getTab(i).title === modellerTitle(name))
+                    tabs.currentIndex = i
+            }
+        }
+    }
+
+    function removeTab(name) {
+        if (modellerPaneExists(name)) {
+            tabs.removeTab(getTabIndex(name))
+            if (tabs.count > 0) {
+                tabs.currentIndex--
+            }
+        }
+    }
+
+    function getTabIndex(name) {
+        for (var i = 0; i < tabs.count; i++) {
+            if (tabs.getTab(i).title === modellerTitle(name))
+                return i
+        }
+    }
+
+    function modellerTitle(name) {
+        return prefix + name
+    }
+
+    function modellerTitleRemovePrefix(name) {
+        if (isModellerTitle(name))
+            return name.substring(prefix.length, name.length)
+    }
+
+    function isModellerTitle(name) {
+        return name.indexOf(prefix) === 0
+    }
+
+    function modellerPaneExists(name) {
+        for (var i = 0; i < tabs.count; i++) {
+            if (tabs.getTab(i).title === modellerTitle(name))
+                return true
+        }
+        return false
+    }
 
     ToolBar{
         id : tabtools
@@ -62,8 +119,8 @@ Rectangle {
         anchors.top : tabtools.bottom
         width : parent.width
         anchors.bottom: parent.bottom
-
         id : tabs
+
             function showObject(objectid){
                  var component = Qt.createComponent("visualization/Visualize.qml")
                 var resource = mastercatalog.id2Resource(objectid)
@@ -85,11 +142,20 @@ Rectangle {
 
             }
 
-           Tab {
-            id : catalog_0
-            title : "Catalog"
-            Catalog.CatalogPanel{
+            onCurrentIndexChanged: {
+                if (currentIndex > 0) {
+                    var title = tabs.getTab(currentIndex).title
+                    if (isModellerTitle(title))
+                        updateSelectedItem(modellerTitleRemovePrefix(title))
+                }
             }
-        }
+
+
+            Tab {
+                id : catalog_0
+                title : "Catalog"
+                Catalog.CatalogPanel{
+                }
+            }
     }
 }

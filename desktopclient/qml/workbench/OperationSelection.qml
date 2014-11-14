@@ -94,7 +94,7 @@ Rectangle {
         orientation: Qt.Vertical
         Rectangle {
             id : applicationForm
-            width : parent.width
+            width : parent.width/2
             height : 0
             x : parent.x + 5
 
@@ -142,7 +142,7 @@ Rectangle {
         }
         TabView{
             id : operationTabs
-            width : parent.width
+            width : parent.width/2
             Tab {
                 title : qsTr("Operation List")
                 signal makeForm(string objectid, string name)

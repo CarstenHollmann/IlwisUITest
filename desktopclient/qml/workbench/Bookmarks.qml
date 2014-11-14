@@ -5,6 +5,7 @@ import QtQuick.Controls.Styles 1.0
 import QtQuick.Dialogs 1.0
 import MasterCatalogModel 1.0
 import "../datapanel" as DataPanel
+import "../datapanel/catalog" as Catalog
 
 Rectangle {
     id : navigationFoldercreate
@@ -134,7 +135,7 @@ Rectangle {
         }
 
     }
-    DataPanel.CatalogProperties{
+    Catalog.CatalogProperties{
         id : catalogProperties
         anchors.bottom : parent.bottom
         //anchors.top : listRect.bottom

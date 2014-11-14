@@ -32,7 +32,11 @@ Rectangle {
         }else {
             workbench.state = workbench.state === "visible" ? "invisible" : "visible"
         }
+    }
 
+    function currentPane() {
+        var currentloader = infoPContent1.source.toString().indexOf(lastPage) !== -1 ? infoPContent1 : infoPContent2
+        return currentloader.item;
     }
 
     function unloadcontent(pagename) {

@@ -12,7 +12,7 @@ Rectangle {
     opacity: 0
     color : "#C6C6C6"
 
-    property string startfolder: "file:///d:/Data"
+    property string startfolder: "file:///d:/dev/Ilwis/testdata"
     property string currentFolder
 
     signal bookmarkadded()
@@ -85,7 +85,7 @@ Rectangle {
             title : "File"
 
             FileSelectionPanel{
-                startFolder: "file:///d:/Data/ILWIS/Visualization"
+                startFolder: "file:///d:/dev/Ilwis/testdata/Visualization"
             }
         }
         Tab {
