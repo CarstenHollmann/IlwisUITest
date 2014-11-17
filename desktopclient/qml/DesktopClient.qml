@@ -51,6 +51,7 @@ ApplicationWindow {
 
     function modellerPane(name) {
         dataPanel.addNewTab(name)
+        dataPanel.showModellerPane(name)
     }
 
     function showModellerPane(name) {

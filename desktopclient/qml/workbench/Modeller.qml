@@ -7,6 +7,7 @@ import OperationCatalogModel 1.0
 import OperationModel 1.0
 import ApplicationFormExpressionParser 1.0
 import ".." as Base
+import ModellerModel 1.0
 
 Rectangle {
     id : modellerContainer
@@ -30,10 +31,11 @@ Rectangle {
 
     }
 
-    function addWorkflow(name, desription) {
+    function addWorkflow(name, description) {
+//        modellermodel.addWorkflow(name, description)
         dummyMaps.append( {
                              name : name,
-                             description: desription}
+                             description: description}
                          )
         workflowView.currentIndex = workflowView.count-1
     }
@@ -54,11 +56,19 @@ Rectangle {
     }
 
     function removeWorkflow(index) {
+//        modellermodel.workflows.remove(index)
+//        setWorkflowMetadata(modellermodel.workflows.get(index-1))
         dummyMaps.remove(index)
-        setWorkflowMetadata(dummyMaps.get(workflowView.currentIndex))
+        setWorkflowMetadata(dummyMaps.get(index-1))
     }
 
     function getWorkflow(name) {
+//        for (var i = 0; i < workflowView.count; i++) {
+//            if (modellermodel.workflows.get(i).name === name) {
+//                workflowView.currentIndex = i
+//                return modellermodel.workflows.get(i)
+//            }
+//        }
         for (var i = 0; i < workflowView.count; i++) {
             if (dummyMaps.get(i).name === name) {
                 workflowView.currentIndex = i
@@ -68,6 +78,11 @@ Rectangle {
     }
 
     function getWorkflowIndex(name) {
+//        for (var i = 0; i < workflowView.count; i++) {
+//            if (modellermodel.workflows.get(i).name === name) {
+//                return i
+//            }
+//        }
         for (var i = 0; i < workflowView.count; i++) {
             if (dummyMaps.get(i).name === name) {
                 return i
@@ -114,12 +129,14 @@ Rectangle {
             executeButton.opacity = 0
             showButton.opacity = 0
             removeWorkflow(getWorkflowIndex(name))
+
         }
     }
 
     Action {
         id : executeModeller
         onTriggered : {
+            //console.log("Execute workflow: " + modellermodel.workflows.get(currentIndex).name)
             console.log("Execute workflow: " + dummyMaps.get(currentIndex).name)
         }
     }
@@ -137,8 +154,8 @@ Rectangle {
         onTriggered : {
             newButton.enabled = true
             cancelButton.opacity = 0
-            modellerPane(modelNameText.text)
             addWorkflow(modelNameText.text,modelDescriptionText.text)
+            modellerPane(modelNameText.text)
             createButton.opacity = 0
             deleteButton.opacity = 1
             executeButton.opacity = 1
@@ -156,6 +173,7 @@ Rectangle {
             clear();
             cancelButton.opacity = 0
             createButton.opacity = 0
+            //setWorkflowMetadata(modellermodel.workflows.get(workflowView.currentIndex))
             setWorkflowMetadata(dummyMaps.get(workflowView.currentIndex))
         }
     }
@@ -294,6 +312,7 @@ Rectangle {
 
     Rectangle {
         id : workflowSelectionBar
+        //height : modellermodel.workflows.count * 20 + headerworkflowSelection.height + 5
         height : dummyMaps.count * 20 + headerworkflowSelection.height + 5
         anchors.top : informationBar.bottom;
         anchors.topMargin: 3
@@ -307,6 +326,7 @@ Rectangle {
             Column {
                 id : workflowSelectionColumn
                 width : parent.width
+                //height : modellermodel.workflows.count * 20 + headerworkflowSelection.height
                 height : dummyMaps.count * 20 + headerworkflowSelection.height
                 Text {
                     id : headerworkflowSelection
@@ -332,6 +352,7 @@ Rectangle {
                             opacity : 0.2
                             radius: 5
                         }
+                        // model : modellermodel.workflows
                         model : dummyMaps
                         focus : true
                         clip : true
@@ -356,6 +377,7 @@ Rectangle {
                                     cursorShape: Qt.ArrowCursor
                                     onClicked: {
                                         workflowView.currentIndex = index
+                                        //setWorkflowMetadata(modellermodel.get(index))
                                         setWorkflowMetadata(dummyMaps.get(index))
                                         currentIndex = index
                                     }
@@ -363,7 +385,8 @@ Rectangle {
                             }
                         }
                         Component.onCompleted: {
-                             setWorkflowMetadata(dummyMaps.get(workflowView.currentIndex))
+                            //setWorkflowMetadata(modellermodel.get(workflowView.currentIndex))
+                            setWorkflowMetadata(dummyMaps.get(workflowView.currentIndex))
                         }
                     }
                 }
@@ -400,7 +423,5 @@ Rectangle {
                 }
             }
         }
-
-
     ]
 }

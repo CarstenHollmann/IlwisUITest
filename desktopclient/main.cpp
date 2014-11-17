@@ -22,8 +22,9 @@
 #include "models/visualizationmanager.h"
 #include "models/objectvisualizationmodel.h"
 #include "models/ilwisobjectmodel.h"
+#include "models/modellermodel.h"
 
-#define TEST_WORKINGDIR QString("file:///d:/projects/ilwis/Ilwis4/testdata")
+#define TEST_WORKINGDIR QString("file:///d:/dev/Ilwis/testdata")
 
 using namespace Ilwis;
 //using namespace Desktopclient;
@@ -50,6 +51,8 @@ int main(int argc, char *argv[])
         qmlRegisterType<VisualizationManager>("VisualizationManager",1,0,"VisualizationManager");
         qmlRegisterType<ObjectVisualizationModel>("ObjectVisualizationModel",1,0,"ObjectVisualizationModel");
         qmlRegisterType<IlwisObjectModel>("IlwisObjectModel",1,0,"IlwisObjectModel");
+        qmlRegisterType<ModellerModel>("ModellerModel",1,0,"ModellerModel");
+        qmlRegisterType<WorkflowModel>("WorkflowModel",1,0,"WorkflowModel");
 
 
         MasterCatalogModel mastercatalogmodel(ctx);
@@ -59,6 +62,8 @@ int main(int argc, char *argv[])
         OperationCatalogModel operations;
         TranquilizerHandler tranquilizers;
         VisualizationManager visualizationManager;
+        ModellerModel modellerModel;
+
 
         //test
         //visualizationManager.addPropertyEditor(itRASTER, "dummy","file:///h:/temp/test.qml");
@@ -73,6 +78,7 @@ int main(int argc, char *argv[])
         ctx->setContextProperty("tranquilizerHandler", &tranquilizers);
         ctx->setContextProperty("operations", &operations);
         ctx->setContextProperty("visualizationmanager", &visualizationManager);
+        ctx->setContextProperty("modellermodel", &modellerModel);
 
 
         mastercatalogmodel.connect(&operations, &OperationCatalogModel::updateCatalog,&mastercatalogmodel, &MasterCatalogModel::updateCatalog );

@@ -73,7 +73,7 @@ function endDrag(mouse)
 }
 
 function startMoveItem(mouse, item) {
-    if (item == null)
+    if (item === null)
         return;
 
     //if (item.objectName != null && item.objectName == "test") {
@@ -87,7 +87,7 @@ function continueMoveItem(mouse)
     if (draggedItem == null)
         return;
 
-    if (mouse.buttons == Qt.LeftButton) {
+    if (mouse.buttons === Qt.LeftButton) {
         draggedItem.x = draggedItem.x + mouse.x - draggedItem.width/2;
         draggedItem.y = draggedItem.y + mouse.y - draggedItem.height/2;
     }
@@ -107,43 +107,20 @@ function endMoveItem(mouse)
     if (draggedItem == null)
         return;
 
-//    if (draggedItem.x > 0 - draggedItem.width/2
-//            && draggedItem.x  < item2.width-draggedItem.width/2
-//            && draggedItem.y  > 0 - draggedItem.height/2
-//            && draggedItem.y  < item2.height-draggedItem.height/2) {
 
-//        if (draggedItem.x < 0) {
-//            draggedItem.x = 0
-//        }
-//        if (draggedItem.x + item2.x + draggedItem.width > window.width) {
-//            draggedItem.x = window.width - draggedItem.width - item2.x
-//        }
-//        if (draggedItem.y < 0) {
-//            draggedItem.y = 0
-//        }
-//        if (draggedItem.y + item2.y + draggedItem.height > window.height) {
-//            draggedItem.y = window.height - draggedItem.height - item2.y
-//        }
-//        draggedItem.created = true;
-        draggedItem.opacity = 1;
-        draggedItem = null;
-//    } else {
-//        if (draggedItem.x < 0) {
-//            draggedItem.x = 0
-//        }
-//        if (draggedItem.x + item2.x + draggedItem.width > window.width) {
-//            draggedItem.x = window.width - draggedItem.width - item2.x
-//        }
-//        if (draggedItem.y < 0) {
-//            draggedItem.y = 0
-//        }
-//        if (draggedItem.y + item2.y + draggedItem.height > window.height) {
-//            draggedItem.y = window.height - draggedItem.height - item2.y
-//        }
-//        draggedItem.created = true;
-//        draggedItem.opacity = 1;
-////        draggedItem.destroy();
-//        draggedItem = null;
-//    }
+    if (draggedItem.x < 0) {
+        draggedItem.x = 0
+    }
+    if (draggedItem.x + draggedItem.width > centerItem.width) {
+        draggedItem.x = centerItem.width - draggedItem.width
+    }
+    if (draggedItem.y < 0) {
+        draggedItem.y = 0
+    }
+    if (draggedItem.y + draggedItem.height*2 > centerItem.height) {
+        draggedItem.y = centerItem.height - draggedItem.height - statusB.height - tabtools.height - toolbar.height
+    }
+    draggedItem.opacity = 1;
+    draggedItem = null;
 }
 

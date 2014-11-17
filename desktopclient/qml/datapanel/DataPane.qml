@@ -48,9 +48,6 @@ Rectangle {
     function removeTab(name) {
         if (modellerPaneExists(name)) {
             tabs.removeTab(getTabIndex(name))
-            if (tabs.count > 0) {
-                tabs.currentIndex--
-            }
         }
     }
 
@@ -141,7 +138,6 @@ Rectangle {
             function objectSelected(objectid){
 
             }
-
             onCurrentIndexChanged: {
                 if (currentIndex > 0) {
                     var title = tabs.getTab(currentIndex).title
