@@ -32,11 +32,11 @@ Rectangle {
     }
 
     function addWorkflow(name, description) {
-//        modellermodel.addWorkflow(name, description)
-        dummyMaps.append( {
-                             name : name,
-                             description: description}
-                         )
+          modellermodel.addWorkflow(name, description)
+//        dummyMaps.append( {
+//                             name : name,
+//                             description: description}
+//                         )
         workflowView.currentIndex = workflowView.count-1
     }
 
@@ -45,8 +45,8 @@ Rectangle {
             modelNameText.text = value.name;
             modelDescriptionText.text = value.description;
             showModellerPane(value.name)
-            name.opacity = 1
-            description.opacity = 1
+            nameItem.opacity = 1
+            descriptionItem.opacity = 1
             createButton.opacity = 0
             deleteButton.opacity = 1
             executeButton.opacity = 1
@@ -56,38 +56,38 @@ Rectangle {
     }
 
     function removeWorkflow(index) {
-//        modellermodel.workflows.remove(index)
-//        setWorkflowMetadata(modellermodel.workflows.get(index-1))
-        dummyMaps.remove(index)
-        setWorkflowMetadata(dummyMaps.get(index-1))
+        modellermodel.removeWorkflow(index)
+        setWorkflowMetadata(modellermodel.get(index-1))
+        //dummyMaps.remove(index)
+        //setWorkflowMetadata(dummyMaps.get(index-1))
     }
 
     function getWorkflow(name) {
-//        for (var i = 0; i < workflowView.count; i++) {
-//            if (modellermodel.workflows.get(i).name === name) {
-//                workflowView.currentIndex = i
-//                return modellermodel.workflows.get(i)
-//            }
-//        }
         for (var i = 0; i < workflowView.count; i++) {
-            if (dummyMaps.get(i).name === name) {
+            if (modellermodel.get(i).name === name) {
                 workflowView.currentIndex = i
-                return dummyMaps.get(i)
+                return modellermodel.get(i)
             }
         }
+//        for (var i = 0; i < workflowView.count; i++) {
+//            if (dummyMaps.get(i).name === name) {
+//                workflowView.currentIndex = i
+//                return dummyMaps.get(i)
+//            }
+//        }
     }
 
     function getWorkflowIndex(name) {
-//        for (var i = 0; i < workflowView.count; i++) {
-//            if (modellermodel.workflows.get(i).name === name) {
-//                return i
-//            }
-//        }
         for (var i = 0; i < workflowView.count; i++) {
-            if (dummyMaps.get(i).name === name) {
+            if (modellermodel.get(i).name === name) {
                 return i
             }
         }
+//        for (var i = 0; i < workflowView.count; i++) {
+//            if (dummyMaps.get(i).name === name) {
+//                return i
+//            }
+//        }
     }
 
     onUpdateSelectedItem:  {
@@ -106,8 +106,8 @@ Rectangle {
         id : newModeller
         onTriggered : {
             newButton.enabled = false
-            name.opacity = 1
-            description.opacity = 1
+            nameItem.opacity = 1
+            descriptionItem.opacity = 1
             cancelButton.opacity = 1
             clear();
             deleteButton.opacity = 0
@@ -168,8 +168,8 @@ Rectangle {
         id : cancelModeller
         onTriggered : {
             newButton.enabled = true
-            name.opacity = 0
-            description.opacity = 0
+            nameItem.opacity = 0
+            descriptionItem.opacity = 0
             clear();
             cancelButton.opacity = 0
             createButton.opacity = 0
@@ -246,7 +246,7 @@ Rectangle {
                 }
             }
             Item{
-                id: name
+                id: nameItem
                 height : 22
                 width : parent.width
                 opacity: 0
@@ -267,7 +267,7 @@ Rectangle {
                 }
             }
             Item {
-                id: description
+                id: descriptionItem
                 height : 22
                 width : parent.width
                 opacity: 0
@@ -312,8 +312,8 @@ Rectangle {
 
     Rectangle {
         id : workflowSelectionBar
-        //height : modellermodel.workflows.count * 20 + headerworkflowSelection.height + 5
-        height : dummyMaps.count * 20 + headerworkflowSelection.height + 5
+        height : modellermodel.count() * 20 + headerworkflowSelection.height + 5
+        //height : dummyMaps.count * 20 + headerworkflowSelection.height + 5
         anchors.top : informationBar.bottom;
         anchors.topMargin: 3
         width : functionBarHeader.width
@@ -326,8 +326,8 @@ Rectangle {
             Column {
                 id : workflowSelectionColumn
                 width : parent.width
-                //height : modellermodel.workflows.count * 20 + headerworkflowSelection.height
-                height : dummyMaps.count * 20 + headerworkflowSelection.height
+                height : modellermodel.count() * 20 + headerworkflowSelection.height
+                //height : dummyMaps.count * 20 + headerworkflowSelection.height
                 Text {
                     id : headerworkflowSelection
                     text : qsTr("Workflows")
@@ -352,8 +352,8 @@ Rectangle {
                             opacity : 0.2
                             radius: 5
                         }
-                        // model : modellermodel.workflows
-                        model : dummyMaps
+                        model : modellermodel.workflows
+                        //model : dummyMaps
                         focus : true
                         clip : true
                         delegate {
@@ -366,7 +366,7 @@ Rectangle {
                                     spacing : 3
                                     Text  {
                                         id : dnText
-                                        text : name
+                                        text : modelName
                                         font.pointSize: 9
                                         anchors.verticalCenter: parent.verticalCenter
                                     }
@@ -377,16 +377,20 @@ Rectangle {
                                     cursorShape: Qt.ArrowCursor
                                     onClicked: {
                                         workflowView.currentIndex = index
-                                        //setWorkflowMetadata(modellermodel.get(index))
-                                        setWorkflowMetadata(dummyMaps.get(index))
+                                        setWorkflowMetadata(modellermodel.get(index))
+                                        //setWorkflowMetadata(dummyMaps.get(index))
                                         currentIndex = index
                                     }
                                 }
                             }
                         }
                         Component.onCompleted: {
-                            //setWorkflowMetadata(modellermodel.get(workflowView.currentIndex))
-                            setWorkflowMetadata(dummyMaps.get(workflowView.currentIndex))
+                            console.log(workflowView.currentIndex);
+                            console.log(modellermodel.get(workflowView.currentIndex).name)
+                            console.log(modellermodel.get(workflowView.currentIndex).modelName)
+                            console.log(modellermodel.count())
+                            setWorkflowMetadata(modellermodel.get(workflowView.currentIndex))
+                            //setWorkflowMetadata(dummyMaps.get(workflowView.currentIndex))
                         }
                     }
                 }

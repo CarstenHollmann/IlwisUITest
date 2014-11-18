@@ -18,18 +18,25 @@ QMLModellerList ModellerModel::workflows()
 
 void ModellerModel::addWorkflow(const QString& name, const QString& description)
 {
-    _models.insert(0, new WorkflowModel(name, description, this));
+    _models.insert(_models.size(), new WorkflowModel(name, description, this));
 
 }
 
-int ModellerModel::count()
+qint64 ModellerModel::count()
 {
     return _models.size();
 }
 
-WorkflowModel* ModellerModel::get(int index)
+WorkflowModel* ModellerModel::get(quint32 index)
 {
     return _models[index];
+}
+
+void ModellerModel::removeWorkflow(quint32 index)
+{
+    if ( 0 <= index < _models.size()) {
+        _models.removeAt(index);
+    }
 }
 
 //---------------------------------------------------
@@ -42,6 +49,11 @@ WorkflowModel::WorkflowModel(const QString &name, const QString &description, QO
 {
     _name = name;
     _description = description;
+}
+
+QString WorkflowModel::modelName() const
+{
+    return  _name;
 }
 
 QString WorkflowModel::name() const

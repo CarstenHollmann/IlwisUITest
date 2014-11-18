@@ -92,14 +92,14 @@ Item {
             id: drawing
             anchors.fill: parent
 
-            DataSource {
-                id: ds
-            }
+//            DataSource {
+//                id: ds
+//            }
 
-            Operation {
-                id: ops
+//            Operation {
+//                id: ops
 
-            }
+//            }
 
         }
     }
